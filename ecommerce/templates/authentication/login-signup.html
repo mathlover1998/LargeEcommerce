@@ -1,0 +1,23 @@
+{% extends 'authentication/baseauth.html' %} 
+{% block bodyforms %}
+<div class="card bg-light p-5">
+    {% if not is_login%}
+    <h3 class='text-dark'>Sign Up</h3>
+    {%else%}
+    <h3 class='text-dark'>Login</h3>
+    {%endif%}
+  <form method="POST">
+    {% csrf_token %}
+    {% if messages %}
+    <ul class="messages" >
+        {% for message in messages %}
+            <li style = 'list-style-type: none;' {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{{form.as_p}}
+<input type="submit" value="Submit">
+</form>
+    
+</div>
+{% endblock bodyforms %}

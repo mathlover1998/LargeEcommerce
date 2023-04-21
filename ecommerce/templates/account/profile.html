@@ -1,0 +1,29 @@
+{% extends 'authentication/baseauth.html' %} 
+{% block title %}Profile{% endblock title %} 
+{% block bodyforms %}
+<div class="card bg-light p-5">
+  <form method="POST" novalidate enctype="multipart/form-data">
+    {% csrf_token %} {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li
+        style="list-style-type: none"
+        {%
+        if
+        message.tags
+        %}
+        class="{{ message.tags }}"
+        {%
+        endif
+        %}
+      >
+        {{ message }}
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %} 
+    {{form.as_p}}
+    <input type="submit" value="Submit" />
+  </form>
+</div>
+{% endblock bodyforms %}
