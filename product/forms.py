@@ -118,5 +118,30 @@ class CreateCouponForm(forms.Form):
         required=True,
     )
     
+class CreateBrandForm(forms.Form):
+    name =  forms.CharField(
+        label='Brand Name',
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        required=True,
+        max_length=100
+    ),
+    Description =  forms.CharField(
+        label='Description',
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        required=True,
+    ),
+    logo_img = forms.ImageField(required=True)
 
-    
+class UpdateBrandForm(forms.Form):
+    name =  forms.CharField(
+        label='Brand Name',
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        required=True,
+        max_length=100
+    ),
+    Description =  forms.CharField(
+        label='Description',
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        required=True,
+    ),
+    logo_img = forms.ImageField(required=True)

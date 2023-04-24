@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required,user_passes_test
 from ecommerce_app.models import Users,Categories,Brands,Products,Orders,Coupons,COMMON_STATUS
-from .forms import CreateProductForm,UpdateProductForm,CreateCouponForm
+from .forms import *
 from django.contrib import messages
 # from django.http import JsonResponse
 # from django.views.decorators.http import require_GET
@@ -171,7 +171,56 @@ def delete_coupon(request,id):
     return render(request,'#')
 
 
-#CRUD 
+#CRUD Brand(s)
+@login_required
+@user_passes_test(lambda user:user.is_active and user.is_staff and not user.is_superuser)
+def create_brand_request(request):
+    form = CreateBrandForm()
+    if request.method =='POST':
+        form = CreateBrandForm(request.POST,request.FILES)
+        if Brands.objects.filter(name = form.cleaned_data['name']).first():
+            messages.error(request,'brand already exist')
+            return redirect('')
+        brand = Brands.objects.create(name = form.cleaned_data['name'],
+                              description = form.cleaned_data['description'],
+                              logo_url = form.cleaned_data['logo_img'])
+        brand.save()
+        return render(request,'#')
+    return render(request,'#',{'form':form})
+
+@login_required
+@user_passes_test(lambda user:user.is_active and user.is_staff and not user.is_superuser)
+def update_brand(request,id):
+    brand = Brands.objects.filter(pk = id).first()
+
+    form = UpdateBrandForm(initial={'name':brand.name,
+                                    'description':brand.description,
+                                    'logo_img':brand.logo_url})
+    if request.method =='POST':
+        form = UpdateBrandForm(request.POST,request.FILES)
+        selected_brand = Brands.objects.filter(name = form.cleaned_data['name']).first()
+        if selected_brand and selected_brand.code != brand.name:
+            messages.error(request,'brand already exist')
+            return redirect('')
+        brand.name = form.cleaned_data['name']
+        brand.description = form.cleaned_data['description']
+        brand.logo_url = form.cleaned_data['logo_img']
+        brand.save()
+        return render(request,'#')
+    return render(request,'#',{'form':form})
+
+@login_required
+@user_passes_test(lambda user:user.is_active and user.is_staff and not user.is_superuser)
+def delete_brand(request,id):
+    brand = Brands.objects.filter(pk=id).first()
+    if brand is None:
+        return render(request,'home/404.html')
+    brand.delete()
+    return render(request,'#')
+
+
+#CRUD review(s)
+
 
 
 # @login_required
