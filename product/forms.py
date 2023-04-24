@@ -1,5 +1,5 @@
 from django import forms
-from ecommerce_app.models import Users,DISCOUNT_TYPE
+from ecommerce_app.models import Users,DISCOUNT_TYPE,COMMON_STATUS
 from django.forms.widgets import SelectDateWidget
 from datetime import datetime as dt
 
@@ -110,6 +110,11 @@ class CreateCouponForm(forms.Form):
     usage_limit =  forms.CharField(
         label='Discount Amount',
         widget=forms.NumberInput(attrs={'class': 'form-control'}),
+        required=True,
+    ),
+    status = forms.CharField(
+        label='Status',
+        widget=forms.ChoiceField(choices=COMMON_STATUS,attrs={'class': 'form-control'}),
         required=True,
     )
     
