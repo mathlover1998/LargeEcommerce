@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib import messages
 from .forms import LoginForm,SignUpForm,UpdateProfileForm
 from django.contrib.auth import login, logout,authenticate
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,user_passes_test
 # from .utils import send_email
 from ecommerce_app.models import Users,ACCOUNT_STATUS
 
@@ -63,6 +63,7 @@ def handle_login(request):
     return render(request, 'authentication/login-signup.html',{"form":form,"is_login":True})
 
 @login_required
+@user_passes_test(lambda user:user.is_active)
 def handle_logout(request):
     logout(request)
     return redirect('handleLogin')
@@ -70,6 +71,7 @@ def handle_logout(request):
 
 
 @login_required
+@user_passes_test(lambda user:user.is_active and not user.is_superuser)
 def update_profile(request):
     user_id = request.user.id
     user = get_object_or_404(Users,pk=user_id)
@@ -78,7 +80,7 @@ def update_profile(request):
                                     'first_name': user.first_name,
                                     'phone_number': user.phone_number,
                                     'gender': user.gender, 
-                                    'DoB': user.date_of_birth,    
+                                    'DoB': user.date_of_birth,
                                     'email': user.email,
                                     'subscription':user.newsletter_subscription,
                                     })

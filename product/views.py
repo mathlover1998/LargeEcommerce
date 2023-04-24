@@ -77,6 +77,18 @@ def delete_product(request,id):
     product.delete()
     return redirect('index')
 
+def get_product(request,id):
+    product = Products.objects.filter(pk=id).first()
+    if product is None:
+        return render(request,'home/404.html')
+    return render(request,'#',{'product':product})
+
+
+
+
+
+
+
 # @login_required
 # @user_passes_test(lambda user:not user.is_staff and not user.is_superuser)
 # def add_to_cart(request,product_id):
@@ -153,4 +165,3 @@ def update_coupon(request,id):
 def disable_coupon(request,id):
     Coupons.objects.filter(pk = id).first().delete()
 
-    
