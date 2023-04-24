@@ -84,7 +84,9 @@ def get_product(request,id):
     return render(request,'#',{'product':product})
 
 
-
+def get_products(request):
+    product_lists = Products.objects.all()
+    return render(request,'#',{'products':product_lists})
 
 
 
