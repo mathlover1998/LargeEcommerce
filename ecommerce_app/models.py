@@ -163,7 +163,7 @@ class ProductQuestions(models.Model):
     question_date = models.DateTimeField(auto_now=True)
 
     class Meta:
-        managed = True
+        managed = Truez
         db_table = 'product_questions'
 
 class ProductAnswers(models.Model):
