@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required,user_passes_test
-from ecommerce_app.models import Users,Categories,Brands,Products,Orders,Coupons,COMMON_STATUS
+from ecommerce_app.models import Users,Categories,Brands,Products,Orders,Coupons,COMMON_STATUS,Reviews
 from .forms import *
 from django.contrib import messages
 # from django.http import JsonResponse
@@ -218,9 +218,37 @@ def delete_brand(request,id):
     brand.delete()
     return render(request,'#')
 
+@login_required
+@user_passes_test(lambda user:user.is_active and user.is_staff and not user.is_superuser)
+def get_brand(request,id):
+    brand = Brands.objects.filter(pk = id).first()
+    if brand is not None:
+        return render(request,'#',{'brand':brand})
+    return render(request,'home/404.html')
+
+@login_required
+@user_passes_test(lambda user:user.is_active and user.is_staff and not user.is_superuser)
+def get_brands(request):
+    brands = Brands.objects.all()
+    return render(request,'#',{'brands':brands})
+    
 
 #CRUD review(s)
-
+@login_required
+@user_passes_test(lambda user:user.is_active and not user.is_superuser)
+def create_review(request):
+    form = CreateReviewForm()
+    if request.method == 'POST':
+        form = CreateReviewForm(request.POST)
+        user = Users.objects.filter(pk = user.id).first()
+        review = Reviews.objects.create(user = user,
+                                        description=form.cleaned_data['description'],
+                                        discount_type=form.cleaned_data['discount_type'],
+                                        )
+        review.save()
+        return redirect('index')
+        
+    return render(request,'#',{'form':form})
 
 
 # @login_required

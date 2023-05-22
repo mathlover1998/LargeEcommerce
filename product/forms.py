@@ -145,3 +145,15 @@ class UpdateBrandForm(forms.Form):
         required=True,
     ),
     logo_img = forms.ImageField(required=True)
+
+class CreateReviewForm(forms.Form):
+    rating = forms.CharField(
+        label='Description',
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        required=True,
+    ),
+    comment = forms.CharField(
+        label='Description',
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        required=True,
+    ),
